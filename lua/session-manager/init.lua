@@ -28,6 +28,21 @@ function M.setup(opts)
   M.start()
 end
 
+local function filtered_buffers()
+  return vim.tbl_filter(function(b)
+    if vim.bo[b].buftype ~= '' then
+      return false
+    end
+    if vim.bo[b].filetype == 'gitcommit' then
+      return false
+    end
+    if vim.bo[b].filetype == 'gitrebase' then
+      return false
+    end
+    return vim.api.nvim_buf_get_name(b) ~= ''
+  end, vim.api.nvim_list_bufs())
+end
+
 function M.start()
   M.current = M.get_current()
   vim.api.nvim_create_autocmd('VimLeavePre', {
@@ -38,18 +53,7 @@ function M.start()
       end
 
       if not Config.options.save_empty then
-        local bufs = vim.tbl_filter(function(b)
-          if vim.bo[b].buftype ~= '' then
-            return false
-          end
-          if vim.bo[b].filetype == 'gitcommit' then
-            return false
-          end
-          if vim.bo[b].filetype == 'gitrebase' then
-            return false
-          end
-          return vim.api.nvim_buf_get_name(b) ~= ''
-        end, vim.api.nvim_list_bufs())
+        local bufs = filtered_buffers()
         if #bufs == 0 then
           return
         end
@@ -83,6 +87,10 @@ function M.load(opt)
   opt = opt or {}
   local session_file = opt.last and M.get_last() or M.get_current()
   if session_file and vim.fn.filereadable(session_file) ~= 0 then
+    if vim.env.GIT_EXEC_PATH then
+      return
+    end
+
     if type(Config.options.pre_load) == 'function' then
       Config.options.pre_load()
     end
