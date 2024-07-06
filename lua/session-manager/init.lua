@@ -62,6 +62,9 @@ function M.start()
       end
     end,
   })
+  if Config.options.auto_load then
+    M.load()
+  end
 end
 
 function M.stop()

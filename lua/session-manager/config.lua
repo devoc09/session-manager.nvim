@@ -6,9 +6,10 @@ local M = {}
 ---@field pre_load? fun()
 ---@field post_load? fun()
 local defaults = {
-  dir = vim.fn.stdpath('state') .. '/sessions/', -- directory where session files are saved
+  dir = vim.fn.stdpath('state') .. '/sessions/',                       -- directory where session files are saved
   options = { 'buffers', 'curdir', 'tabpages', 'winsize', 'skiprtp' }, -- sessionoptions used for saving
-  save_empty = false, -- don't save if there are no open file buffer
+  save_empty = false,                                                  -- don't save if there are no open file buffer
+  auto_load = false,                                                   -- automatic load session file when exists.
 }
 
 ---@type SessionMangerOptions
