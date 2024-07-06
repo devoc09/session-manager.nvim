@@ -10,7 +10,8 @@ Tiny plugin that manage session of neovim.
 ```lua
 {
   'devoc09/session-manager.nvim',
-  event = 'BufReadPre',
-  opts = {}
+  opts = {
+    auto_load = false, -- automatic load session file when exists.
+  }
 }
 ```
