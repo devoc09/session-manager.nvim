@@ -43,6 +43,11 @@ local function filtered_buffers()
   end, vim.api.nvim_list_bufs())
 end
 
+--- @return boolean
+local function is_no_args()
+  return vim.fn.argc() == 0
+end
+
 function M.start()
   M.current = M.get_current()
   vim.api.nvim_create_autocmd('VimLeavePre', {
@@ -66,7 +71,7 @@ function M.start()
       end
     end,
   })
-  if Config.options.auto_load then
+  if Config.options.auto_load and is_no_args() then
     M.load()
   end
 end
