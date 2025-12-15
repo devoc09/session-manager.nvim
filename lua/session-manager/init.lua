@@ -72,7 +72,13 @@ function M.start()
     end,
   })
   if Config.options.auto_load and is_no_args() then
-    M.load()
+    vim.api.nvim_create_autocmd('VimEnter', {
+      once = true,
+      nested = true,
+      callback = function()
+        M.load()
+      end,
+    })
   end
 end
 
